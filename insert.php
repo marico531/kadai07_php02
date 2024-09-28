@@ -14,13 +14,14 @@ $naiyou         = $_POST["naiyou"];
 //2. DB接続します
 try {
   //Password:MAMP='root',XAMPP=''  サクラサーバー登録時はここを変える￥
-  $db_name =  '**********:';            //データベース名
-  $db_host =  '***********';                          //DBホスト
-  $db_id =    '*********';                //アカウント名(登録しているドメイン)
-  $db_pw =    '*********';                  //さくらサーバのパスワード
+  $db_name =  'otenki-marico_rugby_db';            //データベース名
+  $db_host =  'mysql3101.db.sakura.ne.jp';                          //DBホスト
+  $db_id =    'otenki-marico';                //アカウント名(登録しているドメイン)
+  $db_pw =    'marico333';                  //さくらサーバのパスワード
   $server_info ='mysql:dbname='.$db_name.';charset=utf8;host='.$db_host;
   $pdo = new PDO($server_info, $db_id, $db_pw);
 } catch (PDOException $e) {
+  // 接続エラーが発生した場合の処理
   exit('DB_CONNECT:'.$e->getMessage());
 }
 

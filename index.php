@@ -34,7 +34,7 @@
 </form>
 <!-- Main[End] -->
 <br>
-<a href="index.php">チーム一覧を見る</a>
+<a href="select.php">チーム一覧を見る</a>
 
 </body>
 </html>

@@ -1,34 +1,33 @@
 <?php
 //1.  DB接続します
 try {
-    $db_name =  '************************';            //データベース名
-    $db_host =  '************************';  //DBホスト
-    $db_id =    '*************************';                //アカウント名(登録しているドメイン)
-    $db_pw =    '*************************:';           //さくらサーバのパスワード
+    $db_name =  'otenki-marico_rugby_db';            //データベース名
+    $db_host =  'mysql3101.db.sakura.ne.jp';  //DBホスト
+    $db_id =    'otenki-marico';                //アカウント名(登録しているドメイン)
+    $db_pw =    'marico333';           //さくらサーバのパスワード
     $server_info ='mysql:dbname='.$db_name.';charset=utf8;host='.$db_host;
     $pdo = new PDO($server_info, $db_id, $db_pw);
   } catch (PDOException $e) {
-  exit('DB_CONNECT'.$e->getMessage());
-  }
+    exit('DB_CONNECT:'.$e->getMessage());
+}
 
-//２．データ登録SQL作成
+//2．データ登録SQL作成
 $sql = "SELECT * FROM rugby_an_db";
 $stmt = $pdo->prepare($sql);
 $status = $stmt->execute();
 
-//３．データ表示
+//3．データ表示
 $values = "";
-if($status==false) {
-  $error = $stmt->errorInfo();
-  exit("SQLError:".$error[2]);
+if ($status == false) {
+    $error = $stmt->errorInfo();
+    exit("SQLError:".$error[2]);
 }
 
-//全データ取得
-$values =  $stmt->fetchAll(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC[カラム名のみで取得できるモード]
-$json = json_encode($values,JSON_UNESCAPED_UNICODE);
+// 全データ取得
+$values = $stmt->fetchAll(PDO::FETCH_ASSOC); // PDO::FETCH_ASSOCでカラム名のみで取得
+$json = json_encode($values, JSON_UNESCAPED_UNICODE);
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,7 +38,21 @@ $json = json_encode($values,JSON_UNESCAPED_UNICODE);
 <title>チーム一覧表示</title>
 <link rel="stylesheet" href="css/range.css">
 <link href="css/bootstrap.min.css" rel="stylesheet">
-<style>div{padding: 10px;font-size:16px;}</style>
+<style>
+  div { padding: 10px; font-size: 16px; }
+  table { width: 100%; } /* テーブル全体の幅を100%に */
+  th, td { padding: 8px; text-align: left; }
+  th { background-color: #f2f2f2; }
+
+  /* 列の幅を設定 */
+  td:nth-child(2), td:nth-child(4), td:nth-child(6) {
+    white-space: nowrap;  /* 改行を防ぐ */
+    width: 250px;         /* 固定の幅を指定 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 溢れた場合は省略記号（…）を表示 */
+  }
+
+</style>
 </head>
 <body id="main">
 <!-- Head[Start] -->
@@ -47,7 +60,7 @@ $json = json_encode($values,JSON_UNESCAPED_UNICODE);
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-      <a class="navbar-brand" href="index.php">チーム一覧</a>
+        <a class="navbar-brand" href="index.php">チーム一覧</a>
       </div>
     </div>
   </nav>
@@ -56,38 +69,38 @@ $json = json_encode($values,JSON_UNESCAPED_UNICODE);
 
 <!-- Main[Start] -->
 <div>
-    <div class="container jumbotron">
-
-<table>
-<table border='1' style='border-collapse: collapse; width: 50%; text-align: left;'>
-<thead>
-                <tr>
-                    <th>ID</th>
-                    <th>チーム名</th>
-                    <th>チームサイトURL</th>
-                    <th>メインスタジアム名</th>
-                    <th>スタジアムサイトURL</th>
-                    <th>備考</th>
-                </tr>
-            </thead>
-<?php foreach($values as $v){ ?>
-  <tr>
-    <td><?=$value["id"]?></td>
-    <td><?=$value["team_name"]?></td>
-    <td><?=$value["team_url"]?></td>
-    <td><?=$value["stadium_name"]?></td>
-    <td><?=$value["stadium_url"]?></td>
-    <td><?=$value["naiyou"]?></td>
-  </tr>
-<?php } ?>
-</table>
-
+  <div class="container jumbotron">
+    <table border='1' style='border-collapse: collapse;'>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>チーム名</th>
+          <th>チームサイトURL</th>
+          <th>メインスタジアム名</th>
+          <th>スタジアムサイトURL</th>
+          <th>備考</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($values as $v){ ?>
+          <tr>
+            <td><?= $v["id"] ?></td>
+            <td><?= $v["team_name"] ?></td>
+            <td><?= $v["team_url"] ?></td>
+            <td><?= $v["stadium_name"] ?></td>
+            <td><?= $v["stadium_url"] ?></td>
+            <td><?= $v["naiyou"] ?></td>
+          </tr>
+        <?php } ?>
+      </tbody>
+    </table>
   </div>
 </div>
 <!-- Main[End] -->
+
 <script>
-  const a = '<?php echo $json; ?>';
-  console.log(JSON.parse(a));
+  const jsonData = '<?php echo $json; ?>';
+  console.log(JSON.parse(jsonData));
 </script>
 </body>
 </html>
