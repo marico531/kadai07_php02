@@ -12,18 +12,33 @@ $stadium_url    = $_POST["stadium_url"];
 $naiyou         = $_POST["naiyou"];
 
 //2. DB接続します
+// 以下はローカルの場合のコード
+// try {
+//   //Password:MAMP='root',XAMPP=''  サクラサーバー登録時はここを変える￥
+//   $db_name =  'rugbydb';            //データベース名
+//   $db_host =  'localhost';                          //DBホスト
+//   $db_id =    'root';                //アカウント名(登録しているドメイン)
+//   $db_pw =    '';                  //さくらサーバのパスワード
+//   $server_info ='mysql:dbname='.$db_name.';charset=utf8;host='.$db_host;
+//   $pdo = new PDO($server_info, $db_id, $db_pw);
+// } catch (PDOException $e) {
+//   // 接続エラーが発生した場合の処理
+//   exit('DB_CONNECT:'.$e->getMessage());
+// }
+// 以上はローカルの場合のコード
+
+//以下はサクラサーバーの際のコード 
 try {
-  //Password:MAMP='root',XAMPP=''  サクラサーバー登録時はここを変える￥
-  $db_name =  'otenki-marico_rugby_db';            //データベース名
-  $db_host =  'mysql3101.db.sakura.ne.jp';                          //DBホスト
-  $db_id =    ':::::::::::';                //アカウント名(登録しているドメイン)
-  $db_pw =    '::::::::::::';                  //さくらサーバのパスワード
+  $db_name =  '::::::::::::::::::::::';  //データベース名
+  $db_host =  '::::::::::::::::::::::';  //DBホスト
+  $db_id =    '::::::::::::::::::::::';  //アカウント名(登録しているドメイン)
+  $db_pw =    '::::::::::::::::::::::';  //パスワード
   $server_info ='mysql:dbname='.$db_name.';charset=utf8;host='.$db_host;
   $pdo = new PDO($server_info, $db_id, $db_pw);
 } catch (PDOException $e) {
-  // 接続エラーが発生した場合の処理
   exit('DB_CONNECT:'.$e->getMessage());
 }
+//以上がサクラサーバーの際のコード 
 
 //３．データ登録SQL作成
 $sql="INSERT INTO rugby_an_db (team_name,team_url,stadium_name,stadium_url,naiyou,indate) 
